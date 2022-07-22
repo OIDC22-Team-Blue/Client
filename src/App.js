@@ -14,7 +14,7 @@ import 'antd/dist/antd.css';
 function App() {
   return (
     <BrowserRouter>           
-        <SendNotice />
+        <Main />
     </BrowserRouter>
   );
 }
