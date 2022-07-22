@@ -25,8 +25,6 @@ function App() {
         <Route path="sendNotice" element={<SendNotice />} />
       </Routes>
     </BrowserRouter>
-
-    // <Main></Main>
   );
 }
 

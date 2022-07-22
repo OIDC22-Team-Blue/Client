@@ -1,11 +1,13 @@
-import { Layout, Menu, Input } from "antd";
-import { useState } from "react";
+import { Layout, Menu, Button, Input } from "antd";
+import React, { useState, useContext } from "react";
+import { Context } from "./appContext";
 import { BiHelpCircle, BiCheckCircle } from "react-icons/bi";
 import { SiKubernetes } from "react-icons/si";
 import { MdOutlineHistoryEdu } from "react-icons/md";
 import { FiSend } from "react-icons/fi";
 import { AiOutlineUser } from "react-icons/ai";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const { Content, Footer, Sider } = Layout;
 
@@ -33,8 +35,34 @@ const items = [
   getItem("/sendNotice", "Notice", "6", <FiSend />),
 ];
 
-const Login = () => {
+export const Login = () => {
+  // const { store, actions } = useContext(Context);
+  const [user_id, setUser_id] = useState("");
+  const [password, setPassword] = useState("");
+  // const history = useNavigate();
+  const token = sessionStorage.getItem("token");
   const [collapsed, setCollapsed] = useState(false);
+  // console.log("토큰:", token);
+
+  const handleClick = (resp) => {
+    axios
+      .post("http://127.0.0.1:5000/login", {
+        user_id,
+        password,
+      })
+      .then((resp) => {
+        if (resp.status !== 200) {
+          alert("에러!!");
+        }
+        const token = resp.data.access_token;
+        console.log(token);
+        sessionStorage.setItem("token", token);
+        alert("로그인 성공");
+        window.location.href = "/";
+      });
+    return true;
+  };
+
   return (
     <Layout
       style={{
@@ -168,13 +196,28 @@ const Login = () => {
               color: "#8EA4DE",
             }}
           >
-            Login
+            {token && token != "" && token != undefined
+              ? "로그인"
+              : "유저 이름 넣기"}
           </div>
           <div>
             아이디
-            <Input placeholder="아이디" />
+            <Input
+              type="text"
+              placeholder="아이디"
+              value={user_id}
+              onChange={(e) => setUser_id(e.target.value)}
+            />
             비밀번호
-            <Input placeholder="비밀번호" />
+            <Input
+              type="password"
+              placeholder="비밀번호"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <Button type="primary" onClick={handleClick}>
+              완료
+            </Button>
           </div>
           <div
             style={{

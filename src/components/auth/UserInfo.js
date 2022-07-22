@@ -1,5 +1,5 @@
 import { Layout, Menu, Button, Input } from "antd";
-import { useState } from "react";
+import React, { useState } from "react";
 import { BiHelpCircle, BiCheckCircle } from "react-icons/bi";
 import { SiKubernetes } from "react-icons/si";
 import { MdOutlineHistoryEdu } from "react-icons/md";
@@ -35,6 +35,7 @@ const items = [
 
 const Signup = () => {
   const [collapsed, setCollapsed] = useState(false);
+
   return (
     <Layout
       style={{
@@ -167,18 +168,16 @@ const Signup = () => {
               fontSize: "50px",
               color: "#8EA4DE",
             }}
-          >
-            유저 정보
-          </div>
+          ></div>{" "}
           <div>
             아이디
-            <Input value="jisu_test" />
+            <Input type="text" placeholder="user_id" />
             비밀번호
-            <Input value="비밀번호" />
+            <Input type="password" placeholder="password" />
             비밀번호 확인
-            <Input disabled="true" />
+            <Input type="password" />
             관리자 이름
-            <Input value="jisu" />
+            <Input placeholder="name" />
             <Button type="primary">완료</Button>
           </div>
         </Content>
