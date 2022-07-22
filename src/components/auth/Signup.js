@@ -8,12 +8,9 @@ import { AiOutlineUser } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { icons } from "react-icons/lib";
 import SubMenu from "antd/lib/menu/SubMenu";
-import httpClient from "./httpClient";
+
 import axios from "axios";
-// import express from "express";
-// import cors from "cors";
-// const app = express();
-// app.use(cors());
+
 axios.defaults.withCredentials = true;
 
 const { Content, Footer, Sider } = Layout;
