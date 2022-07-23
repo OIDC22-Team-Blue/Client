@@ -1,89 +1,93 @@
-import { Layout, Menu, Input } from 'antd';
-import { useState } from 'react';
-import { BiHelpCircle, BiCheckCircle } from 'react-icons/bi';
-import { SiKubernetes } from 'react-icons/si';
-import { MdOutlineHistoryEdu } from  'react-icons/md';
-import { FiSend } from 'react-icons/fi';
-import { AiOutlineUser, } from 'react-icons/ai';
+import { Layout, Button, Input } from "antd";
+import React, { useState } from "react";
+import axios from "axios";
+import Side from "../sideMenu/side";
 
-const { Content, Footer, Sider } = Layout;
+const { Content, Footer } = Layout;
 
-function getItem(label, key, icon, children) {
-  return {
-    key,
-    icon,
-    children,
-    label,
+export const Login = () => {
+  const [user_id, setUser_id] = useState("");
+  const [password, setPassword] = useState("");
+  const token = sessionStorage.getItem("token");
+
+  const handleClick = (resp) => {
+    axios
+      .post("http://127.0.0.1:5000/login", {
+        user_id,
+        password,
+      })
+      .then((resp) => {
+        if (resp.status !== 200) {
+          alert("에러!!");
+        }
+        const token = resp.data.access_token;
+        console.log(token);
+        sessionStorage.setItem("token", token);
+        alert("로그인 성공");
+        window.location.href = "/";
+      });
+    return true;
   };
-}
 
-const logo = [
-    getItem('Kube-Blue', '1'),
-]
-const user = [
-    getItem('Jisu', '1', <AiOutlineUser />),
-]
-
-const items = [
-  getItem('help', '1', <BiHelpCircle />),
-  getItem('Kubernetes setting', '2', <SiKubernetes />),
-  getItem('Test', 'sub1', <BiCheckCircle />, [
-    getItem('Custom-test1', '3'),
-    getItem('Custom-test-long-title', '4'),
-  ]),
-  getItem('History', '5', <MdOutlineHistoryEdu />),
-  getItem('Notice', '6', <FiSend />),
-];
-  
-
-const Login = () => {
-  const [collapsed, setCollapsed] = useState(false);
   return (
     <Layout
       style={{
-        minHeight: '100vh',
+        minHeight: "100vh",
       }}
     >
-      <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
-        <div className="logo">
-            <Menu theme="light" mode="inline" items={logo} style={{fontSize:'20px'}}/>
-        </div>
-        <div>
-            <Menu theme="light" mode="inline" items={user} />
-        </div>
-        <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} />
-      </Sider>
+      <Side />
       <Layout className="site-layout">
         <Content
           style={{
-            margin: '0 16px',
+            margin: "0 16px",
           }}
         >
           <div
             className="site-layout-background"
             style={{
               padding: 10,
-              fontSize: '50px',
-              color: '#8EA4DE',
+              fontSize: "50px",
+              color: "#8EA4DE",
             }}
           >
-            Login
+            {token && token != "" && token != undefined
+              ? "로그인"
+              : "유저 이름 넣기"}
           </div>
           <div>
-              아이디
-              <Input placeholder='아이디'/>
-              비밀번호
-              <Input placeholder='비밀번호'/>
+            아이디
+            <Input
+              type="text"
+              placeholder="아이디"
+              value={user_id}
+              onChange={(e) => setUser_id(e.target.value)}
+              style={{marginLeft: "10px", width: "200px"}}
+            />
+            <br/>
+            비밀번호
+            <Input
+              type="password"
+              placeholder="비밀번호"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              style={{marginLeft: "10px", width: "200px"}}
+            />
+            <br />
+            <Button type="primary" onClick={handleClick}>
+              완료
+            </Button>
           </div>
-          <div style={{
-              color:"gray"
-          }}>
-              <a>회원가입</a>
+          <div
+            style={{
+              color: "gray",
+            }}
+          >
+            <a>회원가입</a>
           </div>
         </Content>
         <Footer
           style={{
-            textAlign: 'center',
+            textAlign: "center",
           }}
         >
           Version 1.0
